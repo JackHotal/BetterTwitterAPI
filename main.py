@@ -9,6 +9,8 @@ nltk.download('vader_lexicon')
 from nltk.sentiment.vader import SentimentIntensityAnalyzer as SIA
 
 
+import csv
+
 
 print("\n\nTwitter:")
 class TwitterClient(object): 
@@ -101,58 +103,77 @@ class TwitterClient(object):
 def main(): 
     # creating object of TwitterClient Class 
     api = TwitterClient() 
-    # calling function to get tweets 
+    # calling function to get tweets \
 
+    testMovies = ['Once Upon A Time In Hollywood', 'Invisible Man', 'Iron Man', 'Jaws', 'Back To the Future']
 
+    finaldata=[]
 
     #initialize w option for string inputs, and count adjustment
 
-    #for loop feed 
-    tweets = api.get_tweets("test", count = 3) 
+    #for loop MOIES IN MOVIESET>>>>>>>>>>>>> feed 
+    for movie in testMovies:
 
-    #analyze -- return to format like in get_tweets
-    #term_analyzer(tweets)
+      tweets = api.get_tweets("movie", count = 50) 
 
-    #add to dataframe
+      #print(tweets) #array of [{text, sentiment, rtweets,..?}, ...]
+      #print(len(tweets))
 
+      retweetcount = 0
+      #retweetcount
+      for tweet in tweets:
+        retweetcount += tweet['retweets']
+      #print("Retweet Count: {}".format(retweetcount))
+      #DIVIDE BY POS AND NEG RETWEETS????
 
-
-
-    print(tweets) #array of [{text, sentiment, rtweets,..?}, ...]
-  
-    retweetcount = 0
-    #retweetcount
-    for tweet in tweets:
-      retweetcount += tweet['retweets']
-    print("Retweet Count: {}".format(retweetcount))
-    #DIVIDE BY POS AND NEG RETWEETS????
-
-    # picking positive tweets from tweets 
-    ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive'] 
-    # percentage of positive tweets 
-    print("Positive tweets percentage: {} %".format(100*len(ptweets)/len(tweets))) 
-    posretweetcount = 0
-    #retweetcount
-    for tweet in ptweets:
-      posretweetcount += tweet['retweets']
-    print("Positive Retweet Count: {}".format(posretweetcount))
+      # picking positive tweets from tweets 
+      ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive'] 
+      # percentage of positive tweets 
+      print("Positive tweets percentage: {} %".format(100*len(ptweets)/len(tweets))) 
+      posretweetcount = 0
+      #retweetcount
+      for tweet in ptweets:
+        posretweetcount += tweet['retweets']
+      #print("Positive Retweet Count: {}".format(posretweetcount))
 
 
 
-    # picking negative tweets from tweets 
-    ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative'] 
-    # percentage of negative tweets 
-    print("Negative tweets percentage: {} %".format(100*len(ntweets)/len(tweets))) 
-    negretweetcount = 0
-    #retweetcount
-    for tweet in ntweets:
-      negretweetcount += tweet['retweets']
-    print("Negative Retweet Count: {}".format(negretweetcount))
+      # picking negative tweets from tweets 
+      ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative'] 
+      # percentage of negative tweets 
+      print("Negative tweets percentage: {} %".format(100*len(ntweets)/len(tweets))) 
+      negretweetcount = 0
+      #retweetcount
+      for tweet in ntweets:
+        negretweetcount += tweet['retweets']
+      print("Negative Retweet Count: {}".format(negretweetcount))
 
 
 
-    #percentage of neutral tweets 
-    print("Neutral tweets percentage: {} %".format(100*(len(tweets) - len(ntweets) - len(ptweets))/len(tweets))) 
+      #percentage of neutral tweets 
+      print("Neutral tweets percentage: {} %".format(100*(len(tweets) - len(ntweets) - len(ptweets))/len(tweets))) 
+
+
+      #MOVIE NAME, tweets parsed, retweets, etc
+      movieTuple = movie, len(tweets), retweetcount, (100*len(ptweets)/len(tweets)), posretweetcount, (100*len(ntweets)/len(tweets)), negretweetcount, (100*(len(tweets) - len(ntweets) - len(ptweets))/len(tweets))
+
+      print("\n\n\n")
+      print(movieTuple)
+
+      finaldata.append(movieTuple)
+
+
+
+
+
+
+
+
+    with open('output.csv','w') as out:
+        csv_out=csv.writer(out)
+        csv_out.writerow(['name','tweets analyzed','total retweets', 'positive percentage', 'positive retweets','negative percentage', 'negative retweets', 'neutral tweets'])
+        for row in finaldata:
+            csv_out.writerow(row)
 
   
     # printing first 5 positive tweets 
@@ -163,8 +184,8 @@ def main():
     # printing first 5 negative tweets 
     #print("\n\nNegative tweets:") 
     #for tweet in ntweets[:10]: 
-    #    print(tweet['text']) 
-  
+    #    print(tweet['text'])
+
 if __name__ == "__main__": 
     # calling main function 
     main()
