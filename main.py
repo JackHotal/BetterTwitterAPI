@@ -106,7 +106,7 @@ def main():
     api = TwitterClient() 
     # calling function to get tweets \
     col_list = ["budget", "company", "country", "director", "genre", "gross", "name", "rating", "released", "runtime", "score", "star", "votes", "writer", "year"]
-    df = pd.read_csv('movieSETT.csv', usecols = col_list, encoding="cp1252")
+    df = pd.read_csv('movieSETT2016.csv', usecols = col_list, encoding="cp1252")
 
     print(df['name'])
 
@@ -119,9 +119,9 @@ def main():
     finaldata=[]
 
     #initialize w option for string inputs, and count adjustment
-    fuckUp = True
+    fuckUp = False
     if fuckUp == True:
-        time.sleep(900)
+        time.sleep(850)
         #15min?
 
     #for loop MOIES IN MOVIESET>>>>>>>>>>>>> feed 
@@ -129,8 +129,8 @@ def main():
 
       movieCount+=1
       print("Movie Number {0}".format(movieCount))
-      if movieCount%17 == 0:
-        time.sleep(91)
+      if movieCount%170 == 0:
+        time.sleep(901)
         
 
 
@@ -153,29 +153,29 @@ def main():
       # picking positive tweets from tweets 
       ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive'] 
       # percentage of positive tweets 
-      print("Positive tweets percentage: {} %".format(100*len(ptweets)/l)) 
+      #print("Positive tweets percentage: {} %".format(100*len(ptweets)/l)) 
       posretweetcount = 0
       #retweetcount
       for tweet in ptweets:
         posretweetcount += tweet['retweets']
-      print("Positive Retweet Count: {}".format(posretweetcount))
+      #print("Positive Retweet Count: {}".format(posretweetcount))
 
 
 
       # picking negative tweets from tweets 
       ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative'] 
       # percentage of negative tweets 
-      print("Negative tweets percentage: {} %".format(100*len(ntweets)/l)) 
+      #print("Negative tweets percentage: {} %".format(100*len(ntweets)/l)) 
       negretweetcount = 0
       #retweetcount
       for tweet in ntweets:
         negretweetcount += tweet['retweets']
-      print("Negative Retweet Count: {}".format(negretweetcount))
+      #print("Negative Retweet Count: {}".format(negretweetcount))
 
 
 
       #percentage of neutral tweets 
-      print("Neutral tweets percentage: {} %".format(100*(len(tweets) - len(ntweets) - len(ptweets))/l)) 
+      #print("Neutral tweets percentage: {} %".format(100*(len(tweets) - len(ntweets) - len(ptweets))/l)) 
 
 
       #MOVIE NAME, tweets parsed, retweets, etc
@@ -187,18 +187,12 @@ def main():
 
       finaldata.append(movieTuple)
 
-
-
-
-
-
-
-
-    with open('output.csv','w') as out:
-        csv_out=csv.writer(out)
-        csv_out.writerow(['name','tweets analyzed','total retweets', 'positive percentage', 'positive retweets','negative percentage', 'negative retweets', 'neutral tweets'])
-        for row in finaldata:
-            csv_out.writerow(row)
+      if movieCount%9 ==0:
+        with open('output.csv','w') as out:
+          csv_out=csv.writer(out)
+          csv_out.writerow(['name','tweets analyzed','total retweets', 'positive percentage', 'positive retweets','negative percentage', 'negative retweets', 'neutral tweets'])
+          for row in finaldata:
+              csv_out.writerow(row)
 
   
     # printing first 5 positive tweets 
