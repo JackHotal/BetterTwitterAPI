@@ -85,8 +85,7 @@ class TwitterClient(object):
 
         #if final list to return not full, get more tweets
         try: 
-            fetched_tweets = self.api.search(q = "query", count = count, lang = 'en', result_type = 'popular')
-            # try before and after release dates!?!?!? 
+            fetched_tweets = self.api.search(q = query, count = count) 
             tweetCounter = 0
             movTweetCounter = 0 #\/same!?
             movieTermCounter = 0
@@ -168,7 +167,7 @@ class TwitterClient(object):
               query += " movie" # TRY OTHER TERMS???
               print(query)
 
-              fetched_tweets = self.api.search(q = query, count = count, lang = 'en', result_type = 'popular')
+              fetched_tweets = self.api.search(q = query, count = count)
 
               for tweet in fetched_tweets: 
                 PmS_tweet = {}
